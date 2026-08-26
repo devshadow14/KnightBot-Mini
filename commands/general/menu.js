@@ -136,7 +136,7 @@ module.exports = {
       }
 
        // Textmaker Commands
-       if (categories.utility) {
+       if (categories.textmaker) {
         menuText += `┏━━━━━━━━━━━━━━━━━\n`;
         menuText += `┃ 🖋️ TEXTMAKER COMMAND\n`;
         menuText += `┗━━━━━━━━━━━━━━━━━\n`;

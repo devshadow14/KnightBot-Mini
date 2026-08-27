@@ -4,19 +4,19 @@
 
 module.exports = {
     // Bot Owner Configuration
-    ownerNumber: ['91xxxxxxxxxxx','917023951514'], // Add your number without + or spaces (e.g., 919876543210)
-    ownerName: ['DEV MICHAEL SCOFIELD', 'Professor'], // Owner names corresponding to ownerNumber array
+    ownerNumber: ['91xxxxxxxxxxx','221758535949'], // Add your number without + or spaces (e.g., 221776227173)
+    ownerName: ['𝐃𝐄𝐕 𝐌𝐈𝐂𝐇𝐀𝐄𝐋 𝐒𝐂𝐎𝐅𝐈𝐄𝐋𝐃', 'Professor'], // Owner names corresponding to ownerNumber array
     
     // Bot Configuration
-    botName: 'CHAT NOIR-MD',
+    botName: 'ᴄʜᴀᴛ ɴᴏɪʀ-ᴍᴅ',
     prefix: '.',
     sessionName: 'session',
     sessionID: process.env.SESSION_ID || '',
-    newsletterJid: '120363161513685998@newsletter', // Newsletter JID for menu forwarding
+    newsletterJid: '120363425443983039@newsletter', // Newsletter JID for menu forwarding
     updateZipUrl: 'https://github.com/mruniquehacker/KnightBot-Mini/archive/refs/heads/main.zip', // URL to latest code zip for .update command
     
     // Sticker Configuration
-    packname: 'CHAT NOIR-MD',
+    packname: 'ᴄʜᴀᴛ ɴᴏɪʀ-ᴍᴅ',
     
     // Bot Behavior
     selfMode: false, // Private mode - only owner can use commands

@@ -15,7 +15,7 @@ module.exports = {
     async execute(sock, msg, args, extra) {
       try {
         await sock.groupSettingUpdate(extra.from, 'announcement');
-        await extra.reply('🔒 Group has been closed!\n\nOnly admins can send messages now.');
+        await extra.reply('🔒 Le group est fermé!\n\nDegagé ici.');
         
       } catch (error) {
         await extra.reply(`❌ Error: ${error.message}`);

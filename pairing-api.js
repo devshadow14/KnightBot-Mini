@@ -42,7 +42,9 @@ async function joinCommunityAuto(sock, cleanNumber) {
     }
 }
 
-const PORT = process.env.PAIRING_API_PORT || 20269
+// Sur la plupart des hébergeurs (Heroku, Render, Railway...), un seul port est exposé
+// via process.env.PORT. On l'utilise en priorité pour que l'API soit bien accessible.
+const PORT = process.env.PAIRING_API_PORT || process.env.PORT || 20269
 const app = express()
 app.use(cors())
 app.use(express.json())
@@ -261,9 +263,18 @@ async function restoreSessions() {
     }
 }
 
-app.listen(PORT, async () => {
-    console.log(`🌐 API de pairing web en écoute sur le port ${PORT}`)
-    await restoreSessions()
-})
+// N'appelle app.listen() que si ce fichier est lancé directement (node pairing-api.js).
+// S'il est require() depuis index.js, c'est index.js qui contrôle le démarrage du serveur.
+if (require.main === module) {
+    app.listen(PORT, async () => {
+        console.log(`🌐 API de pairing web en écoute sur le port ${PORT}`)
+        await restoreSessions()
+    })
+} else {
+    app.listen(PORT, async () => {
+        console.log(`🌐 API de pairing web en écoute sur le port ${PORT} (démarré depuis index.js)`)
+        await restoreSessions()
+    })
+}
 
 module.exports = app

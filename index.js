@@ -468,6 +468,16 @@ startBot().catch(err => {
   console.error('Error starting bot:', err);
   process.exit(1);
 });
+
+// Démarre aussi le serveur de l'API de pairing web (utilisé par le site) dans ce même
+// process, car la plupart des hébergeurs ne lancent qu'un seul process depuis le Procfile.
+try {
+  require('./pairing-api');
+  console.log('🌐 API de pairing web démarrée avec le bot.');
+} catch (err) {
+  console.error('❌ Impossible de démarrer pairing-api.js :', err.message);
+}
+
 // Handle process termination
 process.on('uncaughtException', (err) => {
   // Handle ENOSPC errors gracefully without crashing

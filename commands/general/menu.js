@@ -150,16 +150,16 @@ module.exports = {
       menuText += `💡 Type ${config.prefix}menu <command> de menu\n`;
       menuText += `©2026 ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝐃𝐄𝐕 𝐌𝐈𝐂𝐇𝐀𝐄𝐋 𝐒𝐂𝐎𝐅𝐈𝐄𝐋𝐃\n`;
       
-      // Send menu with image
+      // Send menu with video
       const fs = require('fs');
       const path = require('path');
-      const imagePath = path.join(__dirname, '../../utils/bot_image.jpg');
+      const videoPath = path.join(__dirname, '../../utils/bot_video.mp4');
       
-      if (fs.existsSync(imagePath)) {
-        // Send image with newsletter forwarding context
-        const imageBuffer = fs.readFileSync(imagePath);
+      if (fs.existsSync(videoPath)) {
+        // Send video with newsletter forwarding context
+        const videoBuffer = fs.readFileSync(videoPath);
         await sock.sendMessage(extra.from, {
-          image: imageBuffer,
+          video: videoBuffer,
           caption: menuText,
           mentions: [extra.sender],
           contextInfo: {

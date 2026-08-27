@@ -60,7 +60,6 @@ const {
   Browsers,
   fetchLatestBaileysVersion
 } = require('@whiskeysockets/baileys');
-const qrcode = require('qrcode-terminal');
 const config = require('./config');
 const handler = require('./handler');
 const fs = require('fs');
@@ -274,11 +273,6 @@ async function startBot() {
   // Connection update handler
   sock.ev.on('connection.update', async (update) => {
     const { connection, lastDisconnect, qr } = update;
-
-    if (qr) {
-      console.log('\n\n📱 Scan this QR code with WhatsApp:\n');
-      qrcode.generate(qr, { small: true });
-    }
 
     if (connection === 'close') {
       const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;

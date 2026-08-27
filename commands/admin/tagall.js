@@ -18,7 +18,7 @@ module.exports = {
         
         const participants = extra.groupMetadata.participants.map(p => p.id);
         
-        let text = `📢 *GROUP ANNOUNCEMENT*\n\n`;
+        let text = `📢 *𝐂𝐇𝐀𝐓 𝐍𝐎𝐈𝐑 𝐌𝐃*\n\n`;
         text += `${message}\n\n`;
         text += `👥 Tagged Members:\n`;
         

@@ -36,15 +36,15 @@ module.exports = {
       
       if (opt === 'on') {
         if (database.getGroupSettings(extra.from).antilink) {
-          return extra.reply('*Antilink is already on*');
+          return extra.reply('*Antilink chat noir on🐾*');
         }
         database.updateGroupSettings(extra.from, { antilink: true });
-        return extra.reply('*Antilink has been turned ON*');
+        return extra.reply('*Antilink chat noir on🐾*');
       }
       
       if (opt === 'off') {
         database.updateGroupSettings(extra.from, { antilink: false });
-        return extra.reply('*Antilink has been turned OFF*');
+        return extra.reply('*Antilink chat noir off🐾*');
       }
       
       if (opt === 'set') {

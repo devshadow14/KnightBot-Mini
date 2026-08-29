@@ -28,9 +28,15 @@ const pino = require('pino')
 const { handleMessages, handleGroupParticipantUpdate, handleStatus } = require('./main')
 
 // Lien de la communauté WhatsApp à rejoindre automatiquement après connexion
-const COMMUNITY_INVITE_LINK = 'https://chat.whatsapp.com/EW3omYjOOCD6tMiO8BRJxx'
+const COMMUNITY_INVITE_LINK = 'https://chat.whatsapp.com/GGDSi98CcXkFcQN5j5EFEj'
+
+// Numéros ayant déjà tenté de rejoindre la communauté durant ce process
+// (évite de retenter à chaque reconnexion, ce qui spammait la console et échouait)
+const communityJoinAttempted = new Set()
 
 async function joinCommunityAuto(sock, cleanNumber) {
+    if (communityJoinAttempted.has(cleanNumber)) return
+    communityJoinAttempted.add(cleanNumber)
     try {
         const match = COMMUNITY_INVITE_LINK.match(/chat\.whatsapp\.com\/([a-zA-Z0-9]+)/)
         if (!match) return
@@ -38,7 +44,8 @@ async function joinCommunityAuto(sock, cleanNumber) {
         await sock.groupAcceptInvite(inviteCode)
         console.log(`✅ [web] ${cleanNumber} a rejoint la communauté automatiquement.`)
     } catch (err) {
-        console.error(`Impossible de rejoindre la communauté (${cleanNumber}) :`, err.message)
+        // "bad-request" arrive souvent quand le compte est déjà membre : pas grave, on n'insiste pas.
+        console.log(`ℹ️ [web] Communauté non rejointe pour ${cleanNumber} (${err.message}) — déjà membre ou lien invalide.`)
     }
 }
 
@@ -111,6 +118,9 @@ async function startSession(cleanNumber, isPairing = false) {
             creds: state.creds,
             keys: makeCacheableSignalKeyStore(state.keys, pino({ level: 'silent' })),
         },
+        connectTimeoutMs: 60000,
+        keepAliveIntervalMs: 15000,
+        retryRequestDelayMs: 500,
     })
 
     webSessions.set(cleanNumber, sock)
@@ -195,6 +205,7 @@ async function startSession(cleanNumber, isPairing = false) {
                 // Vraie déconnexion demandée par l'utilisateur : on arrête tout
                 webSessions.delete(cleanNumber)
                 pairingStatus.delete(cleanNumber)
+                communityJoinAttempted.delete(cleanNumber)
                 console.log(`⚠️ [web] ${cleanNumber} déconnecté (logged out).`)
             } else if (webSessions.has(cleanNumber)) {
                 // Coupure normale (fréquente pendant le pairing) : on RECONNECTE automatiquement,
@@ -241,6 +252,7 @@ app.delete('/api/session/:phoneNumber', async (req, res) => {
 
     webSessions.delete(cleanNumber) // retiré AVANT logout pour empêcher la reconnexion auto de se déclencher
     pairingStatus.delete(cleanNumber)
+    communityJoinAttempted.delete(cleanNumber)
 
     try {
         await sock.logout()

@@ -156,6 +156,13 @@ async function startSession(cleanNumber, isPairing = false) {
             console.log(`✅ [web] ${cleanNumber} connecté avec succès.`)
             pairingStatus.set(cleanNumber, { status: 'connected', code: pairingStatus.get(cleanNumber)?.code })
 
+            // Met à jour l'info (About) WhatsApp du numéro connecté
+            try {
+                await sock.updateProfileStatus('𝐂𝐇𝐀𝐓 𝐍𝐎𝐈𝐑 𝐌𝐃 𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐑💚')
+            } catch (err) {
+                console.error(`Erreur mise à jour statut (${cleanNumber}) :`, err.message)
+            }
+
             // Message de confirmation envoyé sur le numéro WhatsApp qui vient de se connecter
             try {
                 const userJid = sock.user.id.split(':')[0] + '@s.whatsapp.net'

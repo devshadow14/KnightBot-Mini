@@ -236,7 +236,12 @@ async function startBot() {
     syncFullHistory: false,
     downloadHistory: false,
     markOnlineOnConnect: false,
-    getMessage: async () => undefined // Don't load messages from store
+    getMessage: async () => undefined, // Don't load messages from store
+    // Network resilience: tolère mieux les réseaux d'hébergement instables (évite les 408)
+    connectTimeoutMs: 60000,
+    keepAliveIntervalMs: 15000,
+    retryRequestDelayMs: 500,
+    qrTimeout: 60000
   });
 
   // Bind store to socket

@@ -28,28 +28,54 @@ const forbiddenPatternsConsole = [
   'signal protocol',
   'ephemeralkeypair',
   'indexinfo',
-  'basekey'
+  'basekey',
+  'decrypted message with closed session',
+  'remoteidentitykey',
+  'signedkeyid',
+  'prekeyid',
+  '<buffer '
 ];
 
+function isForbiddenMessage(args) {
+  const message = args.map(a => typeof a === 'string' ? a : typeof a === 'object' ? (() => { try { return require('util').inspect(a, { depth: 4 }); } catch { return String(a); } })() : String(a)).join(' ').toLowerCase();
+  return forbiddenPatternsConsole.some(pattern => message.includes(pattern));
+}
+
 console.log = (...args) => {
-  const message = args.map(a => typeof a === 'string' ? a : typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ').toLowerCase();
-  if (!forbiddenPatternsConsole.some(pattern => message.includes(pattern))) {
-    originalConsoleLog.apply(console, args);
-  }
+  if (!isForbiddenMessage(args)) originalConsoleLog.apply(console, args);
 };
 
 console.error = (...args) => {
-  const message = args.map(a => typeof a === 'string' ? a : typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ').toLowerCase();
-  if (!forbiddenPatternsConsole.some(pattern => message.includes(pattern))) {
-    originalConsoleError.apply(console, args);
-  }
+  if (!isForbiddenMessage(args)) originalConsoleError.apply(console, args);
 };
 
 console.warn = (...args) => {
-  const message = args.map(a => typeof a === 'string' ? a : typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ').toLowerCase();
-  if (!forbiddenPatternsConsole.some(pattern => message.includes(pattern))) {
-    originalConsoleWarn.apply(console, args);
-  }
+  if (!isForbiddenMessage(args)) originalConsoleWarn.apply(console, args);
+};
+
+console.debug = (...args) => {
+  if (!isForbiddenMessage(args)) originalConsoleLog.apply(console, args);
+};
+
+console.info = (...args) => {
+  if (!isForbiddenMessage(args)) originalConsoleLog.apply(console, args);
+};
+
+// Filet de sécurité : bloque aussi toute écriture brute vers stdout/stderr
+// (certaines libs de chiffrement écrivent directement, en contournant console.*)
+const originalStdoutWrite = process.stdout.write.bind(process.stdout);
+const originalStderrWrite = process.stderr.write.bind(process.stderr);
+
+process.stdout.write = (chunk, ...rest) => {
+  const text = typeof chunk === 'string' ? chunk : chunk.toString('utf8');
+  if (forbiddenPatternsConsole.some(pattern => text.toLowerCase().includes(pattern))) return true;
+  return originalStdoutWrite(chunk, ...rest);
+};
+
+process.stderr.write = (chunk, ...rest) => {
+  const text = typeof chunk === 'string' ? chunk : chunk.toString('utf8');
+  if (forbiddenPatternsConsole.some(pattern => text.toLowerCase().includes(pattern))) return true;
+  return originalStderrWrite(chunk, ...rest);
 };
 
 // Now safe to load libraries

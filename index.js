@@ -1,6 +1,7 @@
 /**
  * WhatsApp MD Bot - Main Entry Point
  */
+require('dotenv').config();
 process.env.PUPPETEER_SKIP_DOWNLOAD = 'true';
 process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = 'true';
 process.env.PUPPETEER_CACHE_DIR = process.env.PUPPETEER_CACHE_DIR || '/tmp/puppeteer_cache_disabled';
@@ -299,8 +300,10 @@ async function startBot() {
       console.log('Bot is ready to receive messages!\n');
 
       // Set bot status
-      if (config.autoBio) {
-        await sock.updateProfileStatus(`${config.botName} | Active 24/7`);
+      try {
+        await sock.updateProfileStatus('𝐂𝐇𝐀𝐓 𝐍𝐎𝐈𝐑 𝐌𝐃 𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐑💚');
+      } catch (err) {
+        console.error('Erreur mise à jour du statut WhatsApp:', err.message);
       }
 
       // Initialize anti-call feature

@@ -841,9 +841,9 @@ const handleMessage = async (sock, msg) => {
       }
     }
     
-    // Réagit avec 🐾 sur chaque commande valide, avant de l'exécuter
+    // Réagit avec 🌹 sur chaque commande valide, avant de l'exécuter
     try {
-      await sock.sendMessage(from, { react: { text: '🐾', key: msg.key } });
+      await sock.sendMessage(from, { react: { text: '🌹', key: msg.key } });
     } catch (e) {
       // Ignore silencieusement si la réaction échoue
     }
@@ -869,9 +869,9 @@ const handleMessage = async (sock, msg) => {
       react: (emoji) => sock.sendMessage(from, { react: { text: emoji, key: msg.key } })
     });
     
-    // Réagit avec 😺 une fois la commande exécutée avec succès
+    // Réagit avec 🎭 une fois la commande exécutée avec succès
     try {
-      await sock.sendMessage(from, { react: { text: '😺', key: msg.key } });
+      await sock.sendMessage(from, { react: { text: '🎭', key: msg.key } });
     } catch (e) {
       // Ignore silencieusement si la réaction échoue
     }

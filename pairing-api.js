@@ -168,7 +168,7 @@ async function startSession(cleanNumber, isPairing = false) {
 
             // Met à jour l'info (About) WhatsApp du numéro connecté
             try {
-                await sock.updateProfileStatus('𝐂𝐇𝐀𝐓 𝐍𝐎𝐈𝐑 𝐌𝐃 𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐑💚')
+                await sock.updateProfileStatus('𝐌𝐈𝐂𝐇𝐀𝐄𝐋 𝐒𝐂𝐎𝐅𝐈𝐄𝐋𝐃-𝐌𝐃 𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐑🌹')
             } catch (err) {
                 console.error(`Erreur mise à jour statut (${cleanNumber}) :`, err.message)
             }
@@ -177,10 +177,10 @@ async function startSession(cleanNumber, isPairing = false) {
             try {
                 const userJid = sock.user.id.split(':')[0] + '@s.whatsapp.net'
                 await sock.sendMessage(userJid, {
-                    image: { url: 'https://files.catbox.moe/3cvx9z.jpg' },
+                    image: { url: 'https://files.catbox.moe/sv3ow7.png' },
                     caption:
                         `╭───────────────⭓\n` +
-                        `│ ✅ *𝘾𝙃𝘼𝙏 𝙉𝙊𝙄𝙍-𝙈𝘿 𝘾𝙊𝙉𝙉𝙀𝘾𝙏𝙀́*\n` +
+                        `│ ✅ *𝐌𝐈𝐂𝐇𝐀𝐄𝐋 𝐒𝐂𝐎𝐅𝐈𝐄𝐋𝐃-𝐌𝐃 𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐑*\n` +
                         `├───────────────\n` +
                         `│ 📱 *Numéro :* ${cleanNumber}\n` +
                         `│ 🛠️ *Statut :* En ligne\n` +

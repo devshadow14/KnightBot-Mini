@@ -332,7 +332,7 @@ async function startBot() {
 
       // Set bot status
       try {
-        await sock.updateProfileStatus('𝐂𝐇𝐀𝐓 𝐍𝐎𝐈𝐑 𝐌𝐃 𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐑💚');
+        await sock.updateProfileStatus('𝐌𝐈𝐂𝐇𝐀𝐄𝐋 𝐒𝐂𝐎𝐅𝐈𝐄𝐋𝐃-𝐌𝐃 𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐑');
       } catch (err) {
         console.error('Erreur mise à jour du statut WhatsApp:', err.message);
       }

@@ -74,6 +74,7 @@ module.exports = {
       menuText += `┃  ◈ 💾 𝐌𝐄𝐌𝐎𝐑𝐘 : ${usedMemory} MB / ${totalMemory} MB\n`;
       menuText += `┃  ◈ 📦 𝐂𝐎𝐌𝐌𝐀𝐍𝐃𝐒 : ${commands.size}\n`;
       menuText += `┃  ◈ 👑 𝐎𝐖𝐍𝐄𝐑 : ${displayOwner}\n`;
+      menuText += `┃  ◈ 🔗 𝐒𝐈𝐓𝐄 : https://michael-scofield-md.vercel.app\n`;
       menuText += `┃\n`;
       menuText += `╰${'━'.repeat(botTitle.length + 10)}╯\n\n`;
 
@@ -122,6 +123,17 @@ module.exports = {
           text: menuText,
           mentions: [extra.sender]
         }, { quoted: msg });
+      }
+
+      // Envoie un audio à la suite du menu, s'il est présent dans utils/
+      const audioPath = path.join(__dirname, '../../utils/bot_audio.mp3');
+      if (fs.existsSync(audioPath)) {
+        const audioBuffer = fs.readFileSync(audioPath);
+        await sock.sendMessage(extra.from, {
+          audio: audioBuffer,
+          mimetype: 'audio/mp4',
+          ptt: false
+        });
       }
 
     } catch (error) {

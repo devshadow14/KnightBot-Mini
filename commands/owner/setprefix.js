@@ -1,10 +1,9 @@
 /**
- * Set Prefix Command - Change bot command prefix
+ * Set Prefix Command - Change bot command prefix (PAR INSTANCE, pas global)
  */
 
 const config = require('../../config');
-const fs = require('fs');
-const path = require('path');
+const { getPrefix, setPrefix } = require('../../utils/instanceSettings');
 
 module.exports = {
   name: 'setprefix',
@@ -13,30 +12,27 @@ module.exports = {
   description: 'Change bot command prefix',
   usage: '.setprefix <new prefix>',
   ownerOnly: true,
-  
+
   async execute(sock, msg, args, extra) {
     try {
+      const currentPrefix = getPrefix(sock);
+
       if (args.length === 0) {
-        return extra.reply(`📌 Current prefix: ${config.prefix}\n\nUsage: .setprefix <new prefix>`);
+        return extra.reply(`📌 Current prefix: ${currentPrefix}\n\nUsage: ${currentPrefix}setprefix <new prefix>`);
       }
-      
+
       const newPrefix = args[0];
-      
+
       if (newPrefix.length > 3) {
         return extra.reply('❌ Prefix must be 1-3 characters long!');
       }
-      
-      // Update config
-      config.prefix = newPrefix;
-      
-      // Update config file
-      const configPath = path.join(__dirname, '../../config.js');
-      let configContent = fs.readFileSync(configPath, 'utf-8');
-      configContent = configContent.replace(/prefix: '.*'/, `prefix: '${newPrefix}'`);
-      fs.writeFileSync(configPath, configContent);
-      
+
+      // Réglage propre à CETTE instance uniquement (ce numéro connecté),
+      // ne touche jamais config.js ni les autres utilisateurs connectés
+      setPrefix(sock, newPrefix);
+
       await extra.reply(`✅ Prefix changed to: ${newPrefix}\n\nNew command format: ${newPrefix}command`);
-      
+
     } catch (error) {
       await extra.reply(`❌ Error: ${error.message}`);
     }

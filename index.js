@@ -322,17 +322,11 @@ async function startBot() {
         setTimeout(() => startBot(), 3000);
       }
     } else if (connection === 'open') {
-      console.log('\n✅ Bot connected successfully!');
-      console.log(`📱 Bot Number: ${sock.user.id.split(':')[0]}`);
-      console.log(`🤖 Bot Name: ${config.botName}`);
-      console.log(`⚡ Prefix: ${config.prefix}`);
-      const ownerNames = Array.isArray(config.ownerName) ? config.ownerName.join(',') : config.ownerName;
-      console.log(`👑 Owner: ${ownerNames}\n`);
-      console.log('Bot is ready to receive messages!\n');
+      console.log(`✅ ${config.botName} connecté (${sock.user.id.split(':')[0]}, préfixe: ${config.prefix})`);
 
       // Set bot status
       try {
-        await sock.updateProfileStatus('𝐌𝐈𝐂𝐇𝐀𝐄𝐋 𝐒𝐂𝐎𝐅𝐈𝐄𝐋𝐃-𝐌𝐃 𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐑');
+        await sock.updateProfileStatus('𝗠𝗜𝗖𝗛𝗔𝗘𝗟 𝗦𝗖𝗢𝗙𝗜𝗘𝗟𝗗 𝗠𝗗 𝗖𝗢𝗡𝗡𝗘𝗖𝗧𝗘𝗥💚');
       } catch (err) {
         console.error('Erreur mise à jour du statut WhatsApp:', err.message);
       }
@@ -504,6 +498,14 @@ try {
   console.log('🌐 API de pairing web démarrée avec le bot.');
 } catch (err) {
   console.error('❌ Impossible de démarrer pairing-api.js :', err.message);
+}
+
+// Démarre aussi le bot Telegram BUG BOT MICHAEL SCOFIELD V1 dans ce même process
+// (même raison : un seul process est lancé par l'hébergeur Katabump).
+try {
+  require('./bugbot/index');
+} catch (err) {
+  console.error('❌ Impossible de démarrer bugbot/index.js :', err.message);
 }
 
 // Handle process termination

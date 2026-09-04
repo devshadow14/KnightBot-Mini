@@ -4,6 +4,7 @@
 
 const config = require('./config');
 const database = require('./database');
+const { getPrefix, getSelfMode } = require('./utils/instanceSettings');
 const { loadCommands } = require('./utils/commandLoader');
 const { addMessage } = require('./utils/groupstats');
 const { jidDecode, jidEncode } = require('@whiskeysockets/baileys');
@@ -709,7 +710,7 @@ const handleMessage = async (sock, msg) => {
         // Only process if it's an image or video (not documents)
         if (mediaMessage) {
           // Skip if message has a command prefix (let command handle it)
-          if (!body.startsWith(config.prefix)) {
+          if (!body.startsWith(getPrefix(sock))) {
             try {
               // Import sticker command logic
               const stickerCmd = commands.get('sticker');
@@ -798,18 +799,19 @@ const handleMessage = async (sock, msg) => {
     
     
     // Check if message starts with prefix
-    if (!body.startsWith(config.prefix)) return;
+    const instancePrefix = getPrefix(sock);
+    if (!body.startsWith(instancePrefix)) return;
     
     // Parse command
-    const args = body.slice(config.prefix.length).trim().split(/\s+/);
+    const args = body.slice(instancePrefix.length).trim().split(/\s+/);
     const commandName = args.shift().toLowerCase();
     
     // Get command
     const command = commands.get(commandName);
     if (!command) return;
     
-    // Check self mode (private mode) - only owner can use commands
-    if (config.selfMode && !isOwner(sender, sock)) {
+    // Check self mode (private mode) - only owner can use commands, PAR INSTANCE
+    if (getSelfMode(sock) && !isOwner(sender, sock)) {
       return;
     }
     
@@ -854,7 +856,6 @@ const handleMessage = async (sock, msg) => {
     }
     
     // Execute command
-    console.log(`Executing command: ${commandName} from ${sender}`);
     
     await command.execute(sock, msg, args, {
       from,

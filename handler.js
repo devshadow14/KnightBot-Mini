@@ -591,6 +591,28 @@ const handleMessage = async (sock, msg) => {
     
     body = (body || '').trim();
     
+    // Envoie un audio automatiquement quand le bot est tagué (@mentionné) dans un message
+    try {
+      const mentionCtx = content.extendedTextMessage?.contextInfo;
+      const mentionedInThisMsg = mentionCtx?.mentionedJid || [];
+      if (sock.user?.id && mentionedInThisMsg.length > 0 && !msg.key.fromMe) {
+        const botNumber = normalizeJid(sock.user.id);
+        const isBotTagged = mentionedInThisMsg.some(jid => normalizeJid(jid) === botNumber);
+        if (isBotTagged) {
+          const audioPath = path.join(__dirname, 'utils', 'bot_audio.mp3');
+          if (fs.existsSync(audioPath)) {
+            await sock.sendMessage(from, {
+              audio: fs.readFileSync(audioPath),
+              mimetype: 'audio/mp4',
+              ptt: true
+            }, { quoted: msg });
+          }
+        }
+      }
+    } catch (e) {
+      // silencieux : ne bloque jamais le traitement normal du message
+    }
+    
     // Check antiall protection (owner only feature)
     if (isGroup) {
       const groupSettings = database.getGroupSettings(from);
